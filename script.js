@@ -72,12 +72,12 @@ function updateUI(movies) {
 
 // Menampilkan element yang belum ada tapi ketika ada akan ditampilkan
 // Event Binding
-document.addEventListener('click', function (e) {
+document.addEventListener('click', async function (e) {
     // Cek jika ketemu element modal dengan kelas modal-detail-button
     if (e.target.classList.contains('modal-detail-button')) {
         // ambil data dari attribute html data terus nama datanya apa, lalu masukkan kedalam variable imdbID
         const imdbID = e.target.dataset.imdbid;
-        const getMovieDetail = showMovieDetail(imdbID);
+        const getMovieDetail = await showMovieDetail(imdbID);
 
         updateUIDetail(getMovieDetail);
     }
@@ -85,9 +85,10 @@ document.addEventListener('click', function (e) {
 
 // Asyncronous function
 async function showMovieDetail(imdbID) {
-    const response = await fetch("http://www.omdbapi.com/?apikey=d128c81d&i=" + imdbID);
-    const movieData = await response.json();
-    return movieData;
+    return fetch("http://www.omdbapi.com/?apikey=d128c81d&i=" + imdbID)
+        .then(response => response.json())
+        .then(m => m);
+
 }
 
 function updateUIDetail(movieData) {
